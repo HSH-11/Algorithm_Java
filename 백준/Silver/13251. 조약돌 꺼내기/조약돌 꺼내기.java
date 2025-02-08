@@ -22,12 +22,15 @@ public class Main {
 
 		double result = 0;
 		for(int i=0; i<M; i++){
-            double value = 1;
-            for(int j=0; j<K; j++){
-                value *= ((double) (arr[i]-j) / (total-j));
-            }
-            result += value;
-        }
+			if (arr[i] < K) {
+                		continue; 
+            		}
+            		double value = 1;
+            		for(int j=0; j<K; j++){
+                		value *= ((double) (arr[i]-j) / (total-j));
+            		}
+            	result += value;
+        	}
 		
 		System.out.println(result);
 
