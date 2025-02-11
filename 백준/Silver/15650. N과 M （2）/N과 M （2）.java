@@ -5,7 +5,6 @@ public class Main {
 	
 	static int N, M;
 	static int[] arr;
-	static boolean[] visited;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,7 +13,6 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		
 		arr = new int[M];
-		visited = new boolean[N+1];
 		
 		dfs(0,1);
 
