@@ -31,7 +31,6 @@ public class Main {
 					deque.offerLast(num);
 				}
 				sb.append(deque.pollFirst()).append("\n");
-				cnt++;
 			}
 			else {
 				for (int i = 1; i <= K - 1; i++) {
@@ -39,9 +38,9 @@ public class Main {
 					deque.offerFirst(num);
 				}
 				sb.append(deque.pollLast()).append("\n");
-				cnt++;
+				
 			}
-
+			cnt++;
 		}
 		System.out.println(sb.toString());
 
