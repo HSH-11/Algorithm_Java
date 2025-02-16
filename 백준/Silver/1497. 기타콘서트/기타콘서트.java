@@ -1,68 +1,78 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/* <문제 정의 및 해결 방법>
+ * 특정 사람이 연주할 수 있는 기타는 비트마스크 형태로 주어짐
+ * 여러 사람이 협력해서 최소의 기타 개수로 모든 곡을 연주
+ * 비트마스크 값을 이용하여 연주 가능한 기타 집합 나타냄
+ * 완전탐색 + 최소 인원 찾기 (Brute Force)
+ * => 부분집합을 생성하여 각 조합이 모든 기타를 연주할 수 있는 지 확인
+ * => 그 중 가장 적은 기타 수를 가지는 조합 선택
+ */
 public class Main {
-    static int N, M, minGuitarCount = Integer.MAX_VALUE;
-    static int max = 0;
-    //기타 연주 가능 목록 비트마스킹 배열
-    static long[] guitarBit;
-    public static void main(String[] args) throws IOException {
-        //입력값 처리하는 BufferedReader
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        //결과값 출력하는 BufferedWriter
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine()," ");
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        guitarBit = new long[N];
-        //입력값 저장
-        for(int i=0;i<N;i++){
-            st = new StringTokenizer(br.readLine()," ");
-            st.nextToken();
-            char[] guitarTF = st.nextToken().toCharArray();
-            //'Y' = 1, 'N' = 0 비트 형태로 변경
-            for(int j=0;j<M;j++){
-                if (guitarTF[j] == 'Y') {
-                    guitarBit[i] |= (1L<<j);
-                }
-            }
-        }
-        //백트래킹을 통해서 탐색 진행
-        search(0,  0L, 0);
-        //연주할 수 있는 곡이 없을 때
-        if (minGuitarCount == 0) {
-            minGuitarCount = -1;
-        }
-        //기타의 개수 BufferedWriter 저장
-        bw.write(String.valueOf(minGuitarCount));
-        bw.flush();
-        bw.close();
-        br.close();
-    }
-    //백트래킹을 통해서 기타 연주 여부를 기준으로 탐색합니다.
-    static void search(int idx, long guitarMask, int val){
-        //현재 연주 가능한 곡의 개수
-        int bitCount = Long.bitCount(guitarMask);
 
-       
-        //현재 최대값은 같지만, 사용한 기타의 수가 더 작을 때
-        if(bitCount == max && val < minGuitarCount) {
-            minGuitarCount = val;
+	static int N, M, maxSongs;
+	static int minGuitar = Integer.MAX_VALUE;
+	static long[] guitars;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		guitars = new long[N];
+
+		// 인접 배열 초기화
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			st.nextToken(); // 기타 이름 무시
+			char[] guitarYN = st.nextToken().toCharArray();		
+			// M=3이며 2,3번 가능=>110(2)로 표현
+			for (int j = 0; j < M; j++) {
+				if (guitarYN[j] == 'Y') {
+					guitars[i] |= (1L << j);
+				}
+			}
+		}
+
+		
+		findComb(0, 0L, 0);
+		
+		if (minGuitar == 0) {
+			minGuitar = -1;
+		}
+		
+		System.out.println(minGuitar);
+
+	}
+
+	// 백트래킹을 사용하여 가능한 모든 기타 조합 탐색
+//	idx:현재 탐색 중인 기타의 index
+//	selectCount: 현재까지 선택한 기타의 개수
+//	playedMask: 현재까지 선택한 기타들이 연주 가능한 곡을 비트마스크로 표현
+	static void findComb(int idx, long guitarMask, int selected) {
+		int songCount = Long.bitCount(guitarMask); // 연주 가능한 곡 개수 확인
+		
+		//현재 최대값은 같지만, 사용한 기타의 수가 더 작을 때
+        if(songCount == maxSongs && selected < minGuitar) {
+            minGuitar = selected;
         }
         //현재 최대값보다 더 많은 곡을 칠 수 있을 때
-        if(bitCount > max) {
-            minGuitarCount = val;
-            max = bitCount;
+        if(songCount > maxSongs) {
+            minGuitar = selected;
+            maxSongs = songCount;
         }
         //모든 곡을 칠 때, 모든 기타를 확인했을 때
-        if(bitCount == M || idx == N){
+        if(songCount == M || idx == N){
             return;
         }
+		
+		
+		findComb(idx + 1,  guitarMask | guitars[idx], selected+1); // 기타 선택
+		findComb(idx + 1, guitarMask, selected); // 기타 선택하지 않음
+	}
 
-        //현재 기타를 사용할 때
-        search(idx+1, guitarMask | guitarBit[idx], val+1);
-        //현재 기타를 사용하지 않을 때
-        search(idx+1, guitarMask, val);
-
-    }
 }
