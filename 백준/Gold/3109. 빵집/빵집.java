@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 public class Main {
 
 	static char[][] map;
-	//오른쪽,오른쪽 위,오른쪽 아래
 	static int[] dy = {-1,0,1}; 
 	static int R,C,count;
 	
