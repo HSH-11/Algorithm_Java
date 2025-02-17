@@ -55,7 +55,7 @@ public class Main {
 
 	static boolean findSolution() {
 		Block pos = findEmpty();
-		// 빈칸이 없으면 스도쿠 해결
+		
 		if (pos == null)
 			return true;
 
@@ -75,33 +75,18 @@ public class Main {
 	}
 
 	static boolean is_valid(int num, int row, int col) {
-		return !(inRow(num, row) || inCol(num, col) || inBox(num, row, col));
-	}
-
-	static boolean inRow(int num, int row) {
-		return Arrays.stream(board[row]).anyMatch(n -> n == num);
-	}
-
-	static boolean inCol(int num, int col) {
-		for (int i = 0; i < 9; i++) {
-			if (board[i][col] == num)
-				return true;
-		}
-		return false;
-	}
-
-	static boolean inBox(int num, int row, int col) {
 		int boxRow = (row / 3) * 3;
 		int boxCol = (col / 3) * 3;
 
-		for (int i = boxRow; i < boxRow + 3; i++) {
-			for (int j = boxCol; j < boxCol + 3; j++) {
-				if (board[i][j] == num)
-					return true;
-			}
+		for (int i = 0; i < 9; i++) {
+			if (board[row][i] == num)
+				return false; 
+			if (board[i][col] == num)
+				return false; 
+			if (board[boxRow + i / 3][boxCol + i % 3] == num)
+				return false; 
 		}
-
-		return false;
+		return true;
 	}
 
 }
