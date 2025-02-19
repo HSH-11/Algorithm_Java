@@ -2,30 +2,29 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		int N = Integer.parseInt(br.readLine());
-		int[] dp = new int[N];
-		Arrays.fill(dp, 1);
-		int[] num = new int[N];
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
-            num[i] = Integer.parseInt(st.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
-		
-		for (int i = 1; i < N; i++) {//num
-			for (int j = 0; j < i; j++) {
-				if (num[i] > num[j]) {
-					dp[i] = Math.max(dp[i], dp[j]+1);
-				}
-			}
-		}
-		
-		System.out.println(Arrays.stream(dp).max().getAsInt());
-		
-	}
 
+        ArrayList<Integer> lis = new ArrayList<>();
+        lis.add(arr[0]);
+
+        for (int i = 1; i < N; i++) {
+            if (arr[i] > lis.get(lis.size() - 1)) {
+                lis.add(arr[i]);  // 증가하는 경우 추가
+            } else {
+                int idx = Collections.binarySearch(lis, arr[i]);
+                if (idx < 0) idx = -idx - 1;
+                lis.set(idx, arr[i]);  // 적절한 위치에 갱신
+            }
+        }
+
+        System.out.println(lis.size());
+    }
 }
