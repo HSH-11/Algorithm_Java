@@ -25,48 +25,41 @@ import java.util.*;
 public class Main {
 
 	static class Node {
-		// 각 노드의 자식노드 저장
-		HashMap<Character, Node> child;
+		Node[] child;
 		boolean isEnd;
 
 		public Node() {
-			this.child = new HashMap<>();
+			this.child = new Node[10];
 			this.isEnd = false;
 		}
 	}
 
-	static class Trie {
-		Node root;
+	static boolean insert(Node root, String str) {
+		// 시작 노드를 루트노드로 설정(루트노드에는 값이 없음)
+		Node node = root;
 
-		public Trie() {
-			this.root = new Node();
-
-		}
-
-		public boolean insert(String str) {
-			// 시작 노드를 루트노드로 설정(루트노드에는 값이 없음)
-			Node node = this.root;
-
-			for (int i = 0; i < str.length(); i++) {
-				char c = str.charAt(i);
-				if (node.isEnd) {
-					// 기존 번호가 내 접두어임
-					return false;
-				}
-				// 문자열의 각 단어를 가져와서 자식노드 중에 있는지 체크
-				node.child.putIfAbsent(c, new Node());
-				node = node.child.get(c);
-			}
-
-			// 지금 내가 다른 번호의 접두어라면
-			if (!node.child.isEmpty()) {
+		for (int i = 0; i < str.length(); i++) {
+			int num = str.charAt(i) - '0';
+			if (node.isEnd) {
+				// 기존 번호가 내 접두어임
 				return false;
 			}
-			// 삽입이 다 된 번호의 끝 표시
-			node.isEnd = true;
-			return true;
+			
+			if (node.child[num] == null) {
+				node.child[num] = new Node();
+			}
+			node = node.child[num];
 		}
 
+		// 지금 내가 다른 번호의 접두어라면
+		for (int i = 0; i < 10; i++) {
+			if (node.child[i] != null) {
+				return false;
+			}
+		}
+		// 삽입이 다 된 번호의 끝 표시
+		node.isEnd = true;
+		return true;
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -75,27 +68,21 @@ public class Main {
 		int T = Integer.parseInt(br.readLine()); // 테스트 케이스
 
 		while (T-- > 0) {
-			int n = Integer.parseInt(br.readLine());
-			Trie trie = new Trie();
+			int N = Integer.parseInt(br.readLine());
+			Node node = new Node();
 			boolean flag = true;
-			String[] inputs = new String[n];
 
-			for (int i = 0; i < n; i++) {
-				inputs[i] = br.readLine();
-			}
-			
-			Arrays.sort(inputs);
-			
-			for (int i = 0; i < n; i++) {
-				boolean result = trie.insert(inputs[i]);
-				if (!result) {
-					sb.append("NO").append("\n");
+			for (int i = 0; i < N; i++) {
+				String number = br.readLine();
+				if (!insert(node, number)) {
 					flag = false;
-					break;
 				}
 			}
+
 			if (flag) {
 				sb.append("YES").append("\n");
+			} else {
+				sb.append("NO").append("\n");
 			}
 
 		}
