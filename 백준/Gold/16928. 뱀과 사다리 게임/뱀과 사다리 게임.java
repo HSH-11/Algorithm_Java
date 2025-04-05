@@ -9,7 +9,7 @@ import java.util.*;
 // 1번칸에서 시작해서 100번 칸에 도착하는 데 100번 칸에 도착하기 위해 주사위를 굴려야하는 최솟값을 구해야한다.
 
 // 문제 해결
-// BFS 방식(큐는 현재 위치 및 이동 횟수 정보를 가짐)
+// BFS 방식
 // 사다리와 뱀 위치를 Map으로 저장한다.
 // 주사위를 굴리면서 100을 넘어가는 경우는 큐에서 제외
 // 현재 위치를 기준으로 주사위를 굴려 다음에 이동할 위치에 사다리 혹은 뱀이 있는 경우는 이동 위치 새로 갱신 
@@ -18,7 +18,10 @@ public class Main {
 
 	static int N, M;
 	static HashMap<Integer, Integer> ladder_snake;
-	static int[] board = new int[101]; // 이동 횟수를 저장함
+	static final int DICE = 6;
+	static int Max = 100;
+	static int[] dist = new int[Max + 1]; // 이동 횟수를 저장함
+	
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,44 +30,38 @@ public class Main {
 		N = Integer.parseInt(st.nextToken()); // 사다리 수
 		M = Integer.parseInt(st.nextToken()); // 뱀의 수
 		
-		// board
-		Arrays.fill(board, Integer.MAX_VALUE);
 		// 사다리 뱀 위치
 		ladder_snake = new HashMap<Integer, Integer>();
 		for (int i = 0; i < N + M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int curr = Integer.parseInt(st.nextToken());
 			int next = Integer.parseInt(st.nextToken());
-
 			ladder_snake.put(curr, next);
 		}
 
 		bfs();
 
-		System.out.println(board[100]);
+		System.out.println(dist[Max]);
 	}
 
 	static void bfs() {
-		Deque<int[]> queue = new ArrayDeque<>();
-		queue.add(new int[] { 1, 0 }); // 위치와 현재까지의 이동 횟수
+		Deque<Integer> queue = new ArrayDeque<>();
+		queue.add(1);
+		dist[1] = 0;
 
 		while (!queue.isEmpty()) {
-			int[] info = queue.poll();
-			int pos = info[0];
-			int move = info[1];
-
-			for (int i = 1; i <= 6; i++) {
-				int next_pos = pos + i;
-				if (next_pos > 100)
+			int cur = queue.poll();
+			
+			for (int i = 1; i <= DICE; i++) {
+				int next = cur + i;
+				if (next > Max)
 					continue;
-				if (ladder_snake.containsKey(next_pos)) {
-					next_pos = ladder_snake.get(next_pos);
-				}
-				int next_move = move + 1;
-
-				if (board[next_pos] > next_move) {
-					board[next_pos] = next_move;
-					queue.add(new int[] { next_pos, next_move });
+				
+				next = ladder_snake.getOrDefault(next, next);
+				
+				if (dist[next] == 0 && next != 1) { // 방문 안 했으면
+					dist[next] = dist[cur] + 1;
+					queue.add(next);
 				}
 
 			}
