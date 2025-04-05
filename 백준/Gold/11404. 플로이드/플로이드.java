@@ -13,6 +13,7 @@ public class Main {
 
 	static int N, M;
 	static int[][] city;
+	static final int INF = 1_000_000_000;
 	
 
 	public static void main(String[] args) throws IOException {
@@ -24,7 +25,7 @@ public class Main {
 		
 		// 2차원 배열 무한대로 초기화
 		for (int i = 1; i <= N; i++) {
-			Arrays.fill(city[i], Integer.MAX_VALUE);
+			Arrays.fill(city[i], INF);
 		}
 		// 자기 자신으로 가는 비용 0으로 초기화
 		for (int i = 1; i <= N; i++) {
@@ -47,7 +48,7 @@ public class Main {
 			for (int i = 1; i <= N; i++) {
 				for (int j = 1; j <= N; j++) {
 					// k를 거쳐 가는 경로가 존재해야 한다
-					if (city[i][k] == Integer.MAX_VALUE || city[k][j] == Integer.MAX_VALUE) continue;
+					if (city[i][k] == INF || city[k][j] == INF) continue;
 					city[i][j] = Math.min(city[i][j],city[i][k] + city[k][j]);
 				}
 			}
@@ -56,7 +57,7 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= N; j++) {
-				if (city[i][j] == Integer.MAX_VALUE) {
+				if (city[i][j] == INF) {
 					sb.append("0").append(" ");
 				}else {
 					sb.append(city[i][j]).append(" ");
