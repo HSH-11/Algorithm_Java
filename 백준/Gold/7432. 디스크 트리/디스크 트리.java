@@ -1,15 +1,14 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 // 문제 조건
 // 각 서브 디렉토리는 사전순으로 출력한다.
 // 서브 디렉토리는 부모 디렉토리에서 출력한 공백의 개수보다 1많게 공백 출력
 
+//언어 : JAVA , (성공/실패) : 1/0 , 메모리 : 24036 KB , 시간 : 372ms
 
 public class Main {
 	
@@ -23,7 +22,9 @@ public class Main {
 		}
 
 	}
-
+	
+	static StringBuilder sb = new StringBuilder();
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
@@ -33,7 +34,7 @@ public class Main {
 		}
 		
 		traversal(root, 0);
-		
+		System.out.println(sb);
 	}
 	
 	static void insert(String path) {
@@ -55,7 +56,7 @@ public class Main {
 	static void traversal(Trie trie, int depth) {
 		for (Map.Entry<String, Trie> entry : trie.children.entrySet() ) {
 			// 부모 디렉토리보다 한 공백 더 들여쓰기를 해야 하므로 depth만큼 공백 출력하고 디렉토리 이름 출력
-			System.out.println(" ".repeat(depth) + entry.getKey());
+			sb.append(" ".repeat(depth) + entry.getKey()).append("\n");
 			traversal(entry.getValue(), depth + 1);
 		
 		}
