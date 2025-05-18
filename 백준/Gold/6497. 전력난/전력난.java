@@ -1,78 +1,80 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
 
-	static class Node {
-		int v, c;
+    static class Edge implements Comparable<Edge> {
+        int u, v, cost;
 
-		public Node(int v, int c) {
-			this.v = v;
-			this.c = c;
-		}
-	}
+        Edge(int u, int v, int cost) {
+            this.u = u;
+            this.v = v;
+            this.cost = cost;
+        }
 
-	static ArrayList<Node>[] graph;
-	static boolean[] visited;
-	static int m, total;
+        @Override
+        public int compareTo(Edge other) {
+            return Integer.compare(this.cost, other.cost);
+        }
+    }
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int[] parent;
 
-		while (true) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			m = Integer.parseInt(st.nextToken());
-			int n = Integer.parseInt(st.nextToken());
-			
-			if (m == 0 && n == 0) break;
-			graph = new ArrayList[m];
-			for (int i = 0; i < m; i++) {
-				graph[i] = new ArrayList<Main.Node>();
-			}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-			total = 0;
-			for (int i = 0; i < n; i++) {
-				st = new StringTokenizer(br.readLine());
-				int x = Integer.parseInt(st.nextToken());
-				int y = Integer.parseInt(st.nextToken());
-				int z = Integer.parseInt(st.nextToken());
+        while (true) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int m = Integer.parseInt(st.nextToken()); // 노드 수
+            int n = Integer.parseInt(st.nextToken()); // 간선 수
 
-				graph[x].add(new Node(y, z));
-				graph[y].add(new Node(x, z));
-				total += z;
-			}
+            if (m == 0 && n == 0) break;
 
-			System.out.println(total - prim());
-		}
-	}
+            parent = new int[m];
+            for (int i = 0; i < m; i++) parent[i] = i;
 
-	static int prim() {
+            List<Edge> edges = new ArrayList<>();
+            int totalCost = 0;
 
-		int totalCost = 0;
-		visited = new boolean[m];
-		PriorityQueue<Node> pq = new PriorityQueue<Main.Node>((o1, o2) -> o1.c - o2.c);
+            for (int i = 0; i < n; i++) {
+                st = new StringTokenizer(br.readLine());
+                int u = Integer.parseInt(st.nextToken());
+                int v = Integer.parseInt(st.nextToken());
+                int cost = Integer.parseInt(st.nextToken());
 
-		pq.add(new Node(0, 0));
+                edges.add(new Edge(u, v, cost));
+                totalCost += cost;
+            }
 
-		while (!pq.isEmpty()) {
-			Node curr = pq.poll();
-			int curr_v = curr.v;
-			int curr_c = curr.c;
+            // 간선 비용 오름차순 정렬
+            Collections.sort(edges);
 
-			if (visited[curr_v])
-				continue;
+            int mstCost = 0, count = 0;
+            for (Edge edge : edges) {
+                if (union(edge.u, edge.v)) {
+                    mstCost += edge.cost;
+                    if (++count == m - 1) break;
+                }
+            }
 
-			visited[curr_v] = true;
-			totalCost += curr_c;
+            System.out.println(totalCost - mstCost);
+        }
+    }
 
-			for (Node next : graph[curr_v]) {
-				if (!visited[next.v]) {
-					pq.add(new Node(next.v, next.c));
-				}
-			}
-		}
+    static int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
 
-		return totalCost;
-	}
+    static boolean union(int x, int y) {
+        int px = find(x);
+        int py = find(y);
+
+        if (px == py) return false;
+
+        parent[py] = px;
+        return true;
+    }
 }
+
