@@ -36,7 +36,8 @@ public class Main {
 					if (result == 0)
 						break;
 				}
-
+                if (result == 0)
+						break;
 				if (sum > 0) {
 					right--;
 				} else {
