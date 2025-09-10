@@ -5,7 +5,6 @@ public class Main {
 
 	static int R, C, N;
 	static char[][] board;
-	static int[][] times;
 	static int[] dy = { -1, 1, 0, 0 };
 	static int[] dx = { 0, 0, -1, 1 };
 
@@ -28,74 +27,68 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 
 		board = new char[R][C];
-		times = new int[R][C];
-
-		int time = 0;
-
-		Queue<Bomb> queue = new ArrayDeque<Main.Bomb>();
-
-		// 초기 상태 및 1초 후
 		for (int i = 0; i < R; i++) {
-			String line = br.readLine();
-			for (int j = 0; j < C; j++) {
-				if (line.charAt(j) == '.') {
-					board[i][j] = '.';
-				} else if (line.charAt(j) == 'O') {
-					board[i][j] = 'O';
-					times[i][j] = time;
-				}
-			}
+			board[i] = br.readLine().toCharArray();
 		}
 
-		time++;
+		if (N == 1) {
+			printBoard(board);
+			return;
+		}
 
-		while (time < N) {
+		if (N % 2 == 0) {
+			fillBoardWithBombs();
+			printBoard(board);
+			return;
+		}
 
-			// 2초 후: 폭탄이 설치되어 있지 않은 모든 칸 폭탄 설치
-			time++;
-			for (int i = 0; i < R; i++) {
-				for (int j = 0; j < C; j++) {
-					if (board[i][j] == '.') {
-						board[i][j] = 'O';
-						times[i][j] = time;
-					}
-					if (board[i][j] == 'O' && time - times[i][j] >= 2) {
-						queue.add(new Bomb(i, j));
-					}
-				}
-			}
-			if (time >= N)
-				break;
+		// 1차 폭발 후 상태 (3초)
+		char[][] afterFirstBoom = simulate(board);
 
-			// 3초 후: 인접 폭탄 폭발
-			time++;
-			while (!queue.isEmpty()) {
-				Bomb bomb = queue.poll();
-				int cy = bomb.y;
-				int cx = bomb.x;
-				
-				board[cy][cx] = '.';
+		if (N % 4 == 3) {
+			printBoard(afterFirstBoom);
+		} else { // N % 4 == 1
+			char[][] afterSecondBoom = simulate(afterFirstBoom);
+			printBoard(afterSecondBoom);
+		}
 
-				for (int d = 0; d < 4; d++) {
-					int ny = cy + dy[d];
-					int nx = cx + dx[d];
+	}
 
-					if (ny < 0 || ny >= R || nx < 0 || nx >= C)
-						continue;
-
-					board[ny][nx] = '.';
-				}
-			}
-
+	static char[][] simulate(char[][] input) {
+		char[][] full = new char[R][C];
+		for (int i = 0; i < R; i++) {
+			Arrays.fill(full[i], 'O');
 		}
 
 		for (int i = 0; i < R; i++) {
 			for (int j = 0; j < C; j++) {
-				System.out.print(board[i][j]);
+				if (input[i][j] == 'O') {
+					full[i][j] = '.';
+					for (int d = 0; d < 4; d++) {
+						int ny = i + dy[d];
+						int nx = j + dx[d];
+						if (ny >= 0 && ny < R && nx >= 0 && nx < C) {
+							full[ny][nx] = '.';
+						}
+					}
+				}
 			}
-			System.out.println();
 		}
+		return full;
+	}
 
+	static void fillBoardWithBombs() {
+		for (int i = 0; i < R; i++) {
+			Arrays.fill(board[i], 'O');
+		}
+	}
+
+	static void printBoard(char[][] b) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < R; i++) {
+			sb.append(b[i]).append('\n');
+		}
+		System.out.print(sb);
 	}
 
 }
