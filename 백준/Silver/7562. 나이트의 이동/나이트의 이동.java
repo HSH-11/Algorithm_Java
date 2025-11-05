@@ -3,71 +3,72 @@ import java.util.*;
 
 public class Main {
 
-	// 시계방향
-	static int[] dy = { -2, -1, 1, 2, 2, 1, -1, -2 };
-	static int[] dx = { 1, 2, 2, 1, -1, -2, -2, -1 };
-	static boolean[][] visited;
-	static int src_y, src_x, tgt_y, tgt_x;
-	static int I;
+    // 나이트의 8방향 이동
+    static final int[] dy = {-2, -1, 1, 2, 2, 1, -1, -2};
+    static final int[] dx = {1, 2, 2, 1, -1, -2, -2, -1};
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        
+        // 테스트 케이스 수
+        int T = Integer.parseInt(br.readLine());
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int T = Integer.parseInt(br.readLine());
-		StringBuilder sb = new StringBuilder();
+        while (T-- > 0) {
+            // 체스판 크기
+            int N = Integer.parseInt(br.readLine());
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            
+            // 나이트의 시작 위치
+            int startY = Integer.parseInt(st.nextToken());
+            int startX = Integer.parseInt(st.nextToken());
+            
+            // 나이트의 목표 위치
+            st = new StringTokenizer(br.readLine());
+            int targetY = Integer.parseInt(st.nextToken());
+            int targetX = Integer.parseInt(st.nextToken());
+            
+            // BFS를 통해 최단 이동 횟수 구하기
+            sb.append(bfs(N, startY, startX, targetY, targetX)).append("\n");
+        }
+        
+        // 결과 출력
+        System.out.println(sb);
+    }
 
-		while (T-- > 0) {
-			I = Integer.parseInt(br.readLine());
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			// 나이트 현재 위치
-			src_y = Integer.parseInt(st.nextToken());
-			src_x = Integer.parseInt(st.nextToken());
+    // BFS 함수
+    static int bfs(int N, int startY, int startX, int targetY, int targetX) {
+        boolean[][] visited = new boolean[N][N];
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[] {startY, startX, 0}); // 시작 위치와 이동 횟수 0
+        visited[startY][startX] = true;
+        
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int y = current[0], x = current[1], moves = current[2];
 
-			st = new StringTokenizer(br.readLine());
-			// 나이트가 이동하려는 칸
-			tgt_y = Integer.parseInt(st.nextToken());
-			tgt_x = Integer.parseInt(st.nextToken());
+            // 목표 위치에 도달하면 바로 반환
+            if (y == targetY && x == targetX) {
+                return moves;
+            }
 
-			visited = new boolean[I][I];
+            // 8방향으로 이동
+            for (int d = 0; d < 8; d++) {
+                int ny = y + dy[d];
+                int nx = x + dx[d];
 
-			int result = bfs();
-			sb.append(result).append("\n");
-
-		}
-		System.out.println(sb);
-	}
-
-	static int bfs() {
-		Deque<int[]> queue = new ArrayDeque<int[]>();
-		queue.add(new int[] { src_y, src_x, 0 });
-		visited[src_y][src_x] = true;
-		int result = 0;
-
-		while (!queue.isEmpty()) {
-			int[] pos = queue.poll();
-			int y = pos[0];
-			int x = pos[1];
-			int cnt = pos[2];
-
-			for (int d = 0; d < 8; d++) {
-				int curY = dy[d] + y;
-				int curX = dx[d] + x;
-
-
-				if (curY < 0 || curY >= I || curX < 0 || curX >= I)
-					continue;
-				
-
-				if (!visited[curY][curX]) {
-					if (curY == tgt_y && curX == tgt_x) {
-						result = cnt + 1;
-						return result;
-					}
-					queue.add(new int[] { curY, curX, cnt + 1 });
-					visited[curY][curX] = true;
-				}
-			}
-		}
-		return result;
-
-	}
+                // 범위 밖인 경우 무시
+                if (ny < 0 || ny >= N || nx < 0 || nx >= N || visited[ny][nx]) {
+                    continue;
+                }
+                
+                // 이동할 위치 방문 처리
+                visited[ny][nx] = true;
+                queue.add(new int[] {ny, nx, moves + 1});
+            }
+        }
+        
+        // 목표를 찾을 수 없을 경우 (문제 조건상 도달 불가하면 안됨)
+        return -1;
+    }
 }
