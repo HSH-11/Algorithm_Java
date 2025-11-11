@@ -1,30 +1,18 @@
 class Solution {
     public String solution(String code) {
-        String answer = "";
-        boolean mode = true;
-        
+        StringBuilder answer = new StringBuilder();
+        int mode = 0;
         for (int i = 0; i < code.length(); i++) {
-            if (mode) {
-                if (code.charAt(i) != '1') {
-                    if (i % 2 == 0){
-                        answer += String.valueOf(code.charAt(i));
-                    }
-                }else {
-                    mode = !mode;
-                }
-                
-            }else {
-                if (code.charAt(i) != '1') {
-                    if (i % 2 == 1){
-                        answer += String.valueOf(code.charAt(i));
-                    }
-                }else {
-                    mode = !mode;
-                }
+            char current = code.charAt(i);
+            if (current == '1') {
+                mode = mode == 0 ? 1 : 0;
+                continue;
+            }
+
+            if (i % 2 == mode) {
+                answer.append(current);
             }
         }
-        
-        
-        return (answer == "") ? "EMPTY" : answer;
+      return answer.length() == 0 ? "EMPTY" : answer.toString();
     }
 }
