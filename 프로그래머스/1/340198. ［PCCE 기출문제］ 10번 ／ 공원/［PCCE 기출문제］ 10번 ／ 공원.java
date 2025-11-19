@@ -1,31 +1,35 @@
+import java.util.*;
 class Solution {
-    static int r, c;
     public int solution(int[] mats, String[][] park) {
-        r = park.length;
-        c = park[0].length;
-        int result = -1;
-        for (int i = 0; i < r; i++) {
-        	for (int j = 0; j < c; j++) {
-        		for (int mat : mats) {
-        			if (check(mat,i,j,park)) {
-        				result = Math.max(result, mat);
-        			} 
-        		}
-        	}
-        }
+        int r = park.length;
+        int c = park[0].length;
         
-    	
-    	return result;
+        // 큰 돗자리부터 탐색 (내림차순 정렬)
+        Arrays.sort(mats);
+        for (int i = mats.length - 1; i >= 0; i--) {
+            int mat = mats[i];
+            
+            // 돗자리를 놓을 수 있는 시작 좌표 범위 제한
+            for (int y = 0; y <= r - mat; y++) {
+                for (int x = 0; x <= c - mat; x++) {
+                    if (canPlace(mat, y, x, park)) {
+                        return mat;
+                    }
+                }
+            }
+        }
+
+        return -1; // 아무것도 못 놓으면 -1
     }
-    public static boolean check(int mat,int y, int x, String[][] park) {
-    	boolean isEmpty = true;
-    	for (int i = y; i < y + mat; i++) {
-    		for (int j = x; j < x + mat; j++) {
-    			if ( i >= r || j >= c || !park[i][j].equals("-1")) {
-    				return false;
-    			}
-    		}
-    	}
-    	return isEmpty;
-    } 
+
+    private boolean canPlace(int mat, int y, int x, String[][] park) {
+        for (int i = y; i < y + mat; i++) {
+            for (int j = x; j < x + mat; j++) {
+                if (!park[i][j].equals("-1")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
