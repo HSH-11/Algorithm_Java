@@ -4,7 +4,6 @@ class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
         // 정렬을 먼저 해야 앞번호부터 꼬이지 않고 빌려줄 수 있음.
         Arrays.sort(lost);
-        Arrays.sort(reserve);
 
         int least = n - lost.length;
         boolean[] isReserve = new boolean[n + 2]; // n+1 index 접근 시 에러 방지를 위해 +2
