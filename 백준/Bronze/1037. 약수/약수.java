@@ -15,7 +15,6 @@ public class Main {
         Arrays.sort(divisors);
         
         // 2. 최솟값 * 최댓값 = 원래 숫자 N
-        // 결과가 2^31-1보다 클 수 있으므로 long 사용 권장 (이 문제는 int로도 가능)
         long result = (long) divisors[0] * divisors[count - 1];
         
         System.out.println(result);
