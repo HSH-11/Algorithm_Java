@@ -26,13 +26,18 @@ class Solution {
             
             int aStart = aIndex;
             int bStart = bIndex;
+            
+            int acount = 0;
+            int bcount = 0;
 
-            while (aIndex < a.length() && Character.isDigit(a.charAt(aIndex))) {
+            while (aIndex < a.length() && Character.isDigit(a.charAt(aIndex)) && acount < 5) {
                 aIndex++;
+                acount++;
             }
 
-            while (bIndex < b.length() && Character.isDigit(b.charAt(bIndex))) {
+            while (bIndex < b.length() && Character.isDigit(b.charAt(bIndex)) && bcount < 5) {
                 bIndex++;
+                bcount++;
             }
 
             int aNumber = Integer.parseInt(a.substring(aStart, aIndex));
