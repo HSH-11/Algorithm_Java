@@ -1,5 +1,7 @@
 import java.util.*;
 
+// Point!
+// 최소성을 먼저 검사하면 유일성을 검사할 필요가 없는 조합을 미리 걸러낼 수 있음
 class Solution {
     List<List<Integer>> combinations = new ArrayList<>();
     
