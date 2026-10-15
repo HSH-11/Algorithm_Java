@@ -57,6 +57,7 @@ class Solution {
         
         // 3. 교점 위치에 별 표시
         for (long[] point : points) {
+            // y축 방향을 배열의 행 방향에 맞게 뒤집기
             int row = (int) (maxY - point[1]);
             int col = (int) (point[0] - minX);
 
