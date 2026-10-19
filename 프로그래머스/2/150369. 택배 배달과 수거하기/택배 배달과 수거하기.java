@@ -9,11 +9,11 @@ class Solution {
         // 가장 먼 집부터 0번 집 방향으로 탐색
         for (int i = n - 1; i >= 0; i--) {
             
-            // 현재 집의 물량 
+            // 현재 집의 물량
             d -= deliveries[i];
             p -= pickups[i];
             
-            // 배달 또는 수거 물량이 남아 있다면 왕복
+            // 배달 또는 수거 물량이 남아 있다면(음수) 왕복
             while (d < 0 || p < 0) {
                 d += cap;
                 p += cap;
