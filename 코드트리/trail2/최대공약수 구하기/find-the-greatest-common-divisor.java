@@ -6,13 +6,12 @@ public class Main {
         int n = sc.nextInt();
         int m = sc.nextInt();
         
-        while (true) {
-            if (m % n == 0) break;
+        while (n != 0) {
             int temp = m % n;
             m = n;
             n = temp;
         }
 
-        System.out.print(n);
+        System.out.print(m);
     }
 }
