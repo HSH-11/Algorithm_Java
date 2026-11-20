@@ -16,7 +16,7 @@ public class Main {
 
     }
 
-    public static boolean isLeafYear(int y) {
+    public static boolean isLeaPYear(int y) {
 
         return (y % 400 == 0 || (y % 100 != 0 && y % 4 == 0));
     }
@@ -24,7 +24,7 @@ public class Main {
     public static int lastDayNumber(int y, int m) {
 
         if(m == 2) {
-            if (isLeafYear(y)) return 29;
+            if (isLeaPYear(y)) return 29;
             else return 28;
         }
 
