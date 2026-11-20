@@ -16,13 +16,13 @@ public class Main {
     public static boolean isMagicNumber(int n) {
         
         if (n % 3 == 0) return true;
-        
-        int length = String.valueOf(n).length();
 
-        String num = Integer.toString(n);
+        String num = String.valueOf(n);
 
-        for (int i = 0; i < length; i++) {
-            if (num.charAt(i) == '3' || num.charAt(i) == '6' || num.charAt(i) == '9') return true; 
+        for (int i = 0; i < num.length(); i++) {
+            char c = num.charAt(i);
+
+            if (c == '3' || c == '6' || c == '9') return true; 
         };
 
         return false;
