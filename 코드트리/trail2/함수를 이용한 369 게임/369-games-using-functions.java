@@ -17,13 +17,15 @@ public class Main {
         
         if (n % 3 == 0) return true;
 
-        String num = String.valueOf(n);
+        while (n > 0) {
+            int digit = n % 10;
 
-        for (int i = 0; i < num.length(); i++) {
-            char c = num.charAt(i);
+            if (digit == 3 || digit == 6 || digit == 9) {
+                return true;
+            }
 
-            if (c == '3' || c == '6' || c == '9') return true; 
-        };
+            n /= 10;
+        }
 
         return false;
     }
