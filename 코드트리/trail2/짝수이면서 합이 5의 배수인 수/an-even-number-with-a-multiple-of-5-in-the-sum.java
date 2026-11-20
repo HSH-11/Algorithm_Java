@@ -9,7 +9,6 @@ public class Main {
 
     public static String isMagicNumber(int n) {
         
-        int num = n / 10 + n % 10;
-        return (num % 5 == 0 && n % 2 == 0) ? "Yes" : "No";
+        return ((n / 10 + n % 10) % 5 == 0 && n % 2 == 0) ? "Yes" : "No";
     }
 }
