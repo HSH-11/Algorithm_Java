@@ -1,13 +1,21 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-class Point {
-    int x, y, num;
+class Point implements Comparable<Point> {
+    int dist;
+    int index;
 
-    public Point (int x, int y, int num) {
-        this.x = x;
-        this.y = y;
-        this.num = num;
+    public Point (int dist, int index) {
+        this.dist = dist;
+        this.index = index;
+    }
+
+    @Override
+    public int compareTo(Point point) {
+        if (dist != point.dist) {
+            return dist - point.dist;
+        }
+        return index - point.index;
     }
 }
 
@@ -20,14 +28,15 @@ public class Main {
         for (int i = 0; i < n; i++) {
             int x = sc.nextInt();
             int y = sc.nextInt();
+            int dist = Math.abs(x) + Math.abs(y);
 
-            points[i] = new Point(x, y, i + 1);
+            points[i] = new Point(dist, i + 1);
         }
         
-        Arrays.sort(points, (a,b) -> (Math.abs(a.x) + Math.abs(a.y)) - (Math.abs(b.x) + Math.abs(b.y)));
+        Arrays.sort(points);
 
         for (int i = 0; i < n; i++) {
-            System.out.println(points[i].num);
+            System.out.println(points[i].index);
         }
     }
 }
