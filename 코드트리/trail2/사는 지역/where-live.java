@@ -27,11 +27,16 @@ public class Main {
             profiles[i] = new Profile(name, address, region);
         }
 
-        Arrays.sort(profiles, (a,b) -> a.name.compareTo(b.name));
+        // Arrays.sort(profiles, (a,b) -> a.name.compareTo(b.name));
+        int lastIdx = 0;
+        for(int i = 1; i < n; i++) {
+            if(profiles[i].name.compareTo(profiles[lastIdx].name) > 0)
+                lastIdx = i;
+        }
 
-        System.out.println("name " + profiles[n-1].name);
-        System.out.println("addr " + profiles[n-1].address);
-        System.out.println("city " + profiles[n-1].region);
+        System.out.println("name " + profiles[lastIdx].name);
+        System.out.println("addr " + profiles[lastIdx].address);
+        System.out.println("city " + profiles[lastIdx].region);
         
     }
 }
