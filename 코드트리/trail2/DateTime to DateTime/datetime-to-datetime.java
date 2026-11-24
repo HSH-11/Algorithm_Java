@@ -6,20 +6,13 @@ public class Main {
         int B = sc.nextInt();
         int C = sc.nextInt();
 
-        if (A == 11) {
-            if (B == 11) {
-                if (C < 11) {
-                    System.out.print("-1");
-                    return;
-                }
-            }
-            if (B < 11) {
-                System.out.print("-1");
-                return;
-            }    
+        int diff = (A * 24 * 60 + B * 60 + C) - (11 * 24 * 60 + 11 * 60 + 11);
+
+        if (diff < 0) {
+            System.out.print("-1"); 
+        }else {
+            System.out.print(diff);
         }
         
-        int result = (A-11) * 24 * 60 + (B-11) * 60 + (C-11);
-        System.out.print(result); 
     }
 }
