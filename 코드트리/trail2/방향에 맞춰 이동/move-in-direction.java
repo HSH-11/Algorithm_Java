@@ -18,10 +18,9 @@ public class Main {
             else if (direction == 'N') dir = 2;
             else dir = 3;
 
-            while (distance-- > 0) {
-                x += dx[dir];
-                y += dy[dir];
-            }
+            x += dx[dir] * distance;
+            y += dy[dir] * distance;
+            
         }
 
         System.out.print(x + " " + y);
