@@ -1,28 +1,39 @@
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
 
 public class Main {
     
+    static final int DIR_NUM = 4;
+    static final int MAX_N = 100;
+
     static int[] dx = {0, -1, 0, 1};
     static int[] dy = {1, 0, -1, 0};
+
     static int[][] arr;
     static int n, m;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws Exception {
+        StreamTokenizer in = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+        StringBuilder out = new StringBuilder();
         
-        n = sc.nextInt();
-        m = sc.nextInt();
+        in.nextToken(); n = (int) in.nval;
+        in.nextToken(); m = (int) in.nval;
         
         arr = new int[n + 1][n + 1];
         
         for (int i = 0; i < m; i++) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
+            in.nextToken(); int x = (int) in.nval;
+            in.nextToken(); int y = (int) in.nval;
+
+            x--;
+            y--;
 
             arr[x][y] = 1;
             
             int cnt = 0;
-            for (int d = 0; d < 4; d++) {
+            for (int d = 0; d < DIR_NUM; d++) {
                 int nx = x + dx[d];
                 int ny = y + dy[d];
 
@@ -30,13 +41,18 @@ public class Main {
                     cnt++;
             }
 
-            System.out.println((cnt == 3) ? "1" : "0");
+            if (cnt == 3) 
+                out.append(1).append('\n');
+            else 
+                out.append(0).append('\n');
         
         }
 
+        System.out.print(out);
+
     }
 
-    public static boolean inRange (int r, int c) {
-        return (1 <= r && r <= n && 1 <= c && c <= n);
+    public static boolean inRange (int x, int y) {
+        return (0 <= x && x < n && 0 <= y && y < n);
     }
 }
