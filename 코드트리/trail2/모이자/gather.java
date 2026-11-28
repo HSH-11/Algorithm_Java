@@ -16,7 +16,7 @@ public class Main {
         for (int i = 0; i < n; i++) {
             int sum = 0;
             for (int j = 0; j < n; j++) {
-                sum += Math.abs(a[j] * Math.abs(i - j));
+                sum += a[j] * Math.abs(i - j);
             }
             
             minVal = Math.min(sum, minVal);
